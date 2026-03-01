@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy 24th Birthday Amy</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@400;600&display=swap');
+
+    :root {
+      /* 明亮溫暖的生日色系 */
+      --bg-color: #FFF8EE;        /* 奶油象牙白背景 */
+      --env-back: #EAD1B7;        /* 溫暖蜜桃底 */
+      --env-flap: #F2DEC6;        /* 明亮信封蓋 */
+      --env-front-l: #E8CEB3;
+      --env-front-r: #DFBFA1;
+      --env-front-b: #EBCDAE;
+      --letter-bg: #FFFFFF;       /* 純白信紙 */
+      --gold: #DDA76A;            /* 溫暖的明亮金 */
+      --text-dark: #5C4D43;       /* 溫暖深棕色，取代純黑 */
+      --text-light: #9C8C7D;      
+      --wax-color: #E27D60;       /* 珊瑚玫瑰封蠟，視覺焦點 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      /* 保持精品的紙張紋理 */
+      background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.01) 0px, rgba(0,0,0,0.01) 1px, transparent 1px, transparent 4px);
+      min-height: 100vh;
+      /* 針對手機瀏覽器處理高度 */
+      min-height: 100dvh; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Playfair Display', 'Noto Serif TC', serif;
+      overflow: hidden;
+      color: var(--text-dark);
+    }
+
+    /* 浮水印背景文字 (取代跑馬燈，營造精品感) */
+    .bg-typography {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.06; /* 非常隱約的高級感 */
+      user-select: none;
+    }
+
+    .bg-typography .name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 16vw;
+      font-weight: 600;
+      white-space: nowrap;
+      line-height: 1.1;
+      color: var(--text-dark);
+    }
+
+    .bg-typography .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: 6vw;
+      letter-spacing: 0.3em;
+      margin-top: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .bg-typography .name { font-size: 96px; }
+      .bg-typography .subtitle { font-size: 32px; }
+    }
+
+    /* 場景容器 */
+    .scene {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    /* 信封本體與漂浮動畫 (UI/UX 暗示) */
+    .envelope-wrapper {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      perspective: 1200px;
+      cursor: pointer;
+      z-index: 5;
+      filter: drop-shadow(0 20px 40px rgba(92, 77, 67, 0.15));
+      /* 待機時的微微浮動 */
+      animation: floatEnv 4s ease-in-out infinite;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes floatEnv {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* 當點擊互動後，停止浮動 */
+    .envelope-wrapper.is-interacting {
+      animation: none;
+    }
+
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background: var(--env-back);
+      border-radius: 4px;
+      z-index: 1;
+    }
+
+    .env-front-left {
+      position: absolute;
+      top: 0; left: 0;
+      width: 150px; height: 200px;
+      background: var(--env-front-l);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      z-index: 5;
+    }
+
+    .env-front-right {
+      position: absolute;
+      top: 0; right: 0;
+      width: 150px; height: 200px;
+      background: var(--env-front-r);
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+      z-index: 5;
+    }
+
+    .env-front-bottom {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 300px; height: 200px;
+      background: var(--env-front-b);
+      clip-path: polygon(0 100%, 50% 45%, 100% 100%);
+      z-index: 6;
+    }
+
+    /* 信封表面的質感文字 (打凹印刷效果) */
+    .envelope-text {
+      position: absolute;
+      top: 35px; /* 從 bottom 改為 top，定位在上蓋區域 */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 7;
+      text-align: center;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .envelope-text .env-name {
+      display: block;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 18px;
+      color: var(--text-dark);
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+      opacity: 0.85;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4); /* 營造紙張打凹感 */
+    }
+
+    .envelope-text .env-bday {
+      display: block;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 11px;
+      color: var(--text-dark);
+      letter-spacing: 3px;
+      opacity: 0.5;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+    }
+
+    /* 信封上蓋 */
+    .envelope-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 300px; height: 140px;
+      transform-origin: top;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 8;
+      transform-style: preserve-3d;
+    }
+
+    .flap-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--env-flap);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    /* 珊瑚玫瑰色封蠟 - 帶有脈衝呼吸光暈 (UI/UX 暗示) */
+    .wax-seal {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      background: var(--wax-color);
+      border-radius: 50%;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.4);
+      animation: waxPulse 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .wax-seal svg {
+      width: 20px;
+      height: 20px;
+      fill: #FFF2E8; /* 奶油色印花 */
+      opacity: 0.9;
+    }
+
+    /* 光暈脈衝動畫 */
+    @keyframes waxPulse {
+      0% { box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.4), 0 0 0 0 rgba(226, 125, 96, 0.6); }
+      70% { box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.4), 0 0 0 15px rgba(226, 125, 96, 0); }
+      100% { box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.4), 0 0 0 0 rgba(226, 125, 96, 0); }
+    }
+
+    /* =========================================
+       信件本體 (動態全螢幕延展設計)
+       ========================================= */
+    .letter {
+      position: absolute;
+      /* 初始狀態：完全藏於信封內，中心點對齊 */
+      top: 50%;
+      left: 50%;
+      width: 260px;
+      height: 160px;
+      transform: translate(-50%, -50%);
+      
+      background: var(--letter-bg);
+      border-radius: 6px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      z-index: 3; /* 在口袋後，底板前 */
+      pointer-events: none; 
+      
+      /* 設定過渡：位置、寬高、Z軸層級 */
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  width 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  z-index 0s 0.6s,
+                  box-shadow 0.6s;
+                  
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px 20px;
+    }
+
+    /* 內層裝飾邊框 (跟隨外框延展) */
+    .letter::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(221, 167, 106, 0.3);
+      pointer-events: none;
+      border-radius: 4px;
+    }
+
+    /* 星星 Icon (Miffy 簡約感) */
+    .letter-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--gold);
+      flex-shrink: 0;
+      /* 讓星星在動畫初期就可見，作為精緻點綴 */
+      opacity: 1;
+      transition: margin 0.6s ease;
+    }
+
+    /* 文字內容區塊 (預設隱藏，展開後淡入) */
+    .letter-content {
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0; /* 初始隱藏，避免縮小時文字擁擠 */
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin-top: 15px;
+      padding-right: 5px; /* 預留捲軸空間 */
+    }
+
+    /* 自訂優雅的捲軸 */
+    .letter-content::-webkit-scrollbar { width: 4px; }
+    .letter-content::-webkit-scrollbar-track { background: transparent; }
+    .letter-content::-webkit-scrollbar-thumb { background: var(--env-flap); border-radius: 4px; }
+
+    .letter h1 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+      color: var(--text-dark);
+      text-align: center;
+    }
+
+    .letter h2 {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-light);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      border: none;
+      margin-bottom: 25px;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    .body-text {
+      font-size: 15px; /* 適合手機閱讀的字體大小 */
+      line-height: 2;
+      color: var(--text-dark);
+      text-align: justify;
+      width: 100%;
+    }
+
+    .body-text p {
+      margin-bottom: 16px;
+    }
+
+    .body-text .signature {
+      margin-top: 35px;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: var(--text-light);
+      font-family: 'Playfair Display', serif;
+      text-align: right;
+    }
+
+    .close-btn {
+      margin-top: auto; /* 推到底部 */
+      padding: 10px 30px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      outline: none;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    /* =========================================
+       動畫狀態機器 (由 JS 控制)
+       ========================================= */
+
+    /* 狀態 1：打開上蓋 */
+    .envelope-wrapper.flap-open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 2; /* 蓋子翻開後層級下降，讓信紙可以出來 */
+    }
+    .envelope-wrapper.flap-open .wax-seal {
+      animation: none; /* 停止脈衝 */
+    }
+
+    /* 狀態 2：信紙向上抽出 */
+    .envelope-wrapper.letter-pull .letter {
+      transform: translate(-50%, calc(-50% - 220px));
+    }
+
+    /* 狀態 3：信紙居中並展開成大螢幕模式 (閱讀模式) */
+    .envelope-wrapper.letter-read .letter {
+      /* 放大尺寸至幾乎填滿螢幕 */
+      width: 90vw;
+      max-width: 480px;
+      height: 82vh; 
+      max-height: 800px;
+      
+      /* 退回畫面中央 */
+      transform: translate(-50%, -50%);
+      
+      /* 關鍵：向前動畫時，Z-index 必須立刻變成 12，不可延遲 */
+      z-index: 12;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  width 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  z-index 0s 0s, /* 0秒延遲 */
+                  box-shadow 0.6s;
+                  
+      box-shadow: 0 20px 50px rgba(92, 77, 67, 0.25);
+      pointer-events: auto;
+    }
+
+      /* 閱讀模式下，文字內容淡入 */
+    .envelope-wrapper.letter-read .letter-content {
+      opacity: 1;
+      transition: opacity 0.6s ease 0.4s; /* 等待紙張展開後再顯示文字 */
+    }
+    .envelope-wrapper.letter-read .letter-icon {
+      margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- 背景精品感排版 -->
+  <div class="bg-typography">
+    <div class="name">Amy 歐書綾</div>
+    <div class="subtitle">Happy 24th Birthday</div>
+  </div>
+
+  <div class="scene">
+    <!-- 互動信封 -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <div class="envelope-back"></div>
+      
+      <!-- 展開式大信紙 -->
+      <div class="letter" id="letter">
+        <!-- 精緻星芒 Icon -->
+        <svg class="letter-icon" viewBox="0 0 24 24">
+          <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z" />
+        </svg>
+        
+        <!-- 動態文字區塊 -->
+        <div class="letter-content">
+          <h1>Amy</h1>
+          <h2>Happy 24th Birthday</h2>
+          <hr class="divider">
+          
+          <div class="body-text">
+            <p>Dear 我永遠的寶貝 歐書綾，</p>
+            <p>生日快樂，小寶。今天我想把你輕輕抱進我的文字裡，讓你在異地也能感覺到，我一直在你身邊。你對我來說從來不是一個稱呼或一段關係而已，你是一種方向感，是我在疲憊、迷惘、甚至有點狼狽的時候，心裡仍然會默默走回去的地方。有時候我想起你，腦袋裡不是什麼轟轟烈烈的宣言，而是一個很安靜、很清楚的念頭：不論世界再吵一點，生活在不順一點，只要想起你，我就會安定一點。</p>
+            <p>我很喜歡你那種可愛得不需要用力的樣子，有點傻呼呼、有點公主氣，卻又真誠到讓人想把你捧在手心裡。你抱著我的時候像無尾熊一樣整個黏上來，那一瞬間我總會覺得，原來愛是一種具體的重量，是一個人願意用全身告訴你「我在這裡」。有時候你生氣會像煙火一樣炸開，嘴巴很兇、火力很猛，但我心裡常常只剩一件事：捨不得你難過。因為我知道，你不是在吵輸贏，你是在乎，你只是希望我更懂你、更快接住你。我的臭寶，你那些擔心、那些孤單、那些難過我不懂你、那些在異地念書時突然湧上來的無奈，我都放在心上，只是有時候我還在學，學怎麼用更成熟的方式，讓你真的放心。</p>
+            <p>回頭看這一年，像我們一起寫了一本只屬於我們的長篇。從八月底你去美國、去康乃爾開始，遠距離就成了我們的日常練習，練習跨時差、練習把想念藏進日常、練習在有限的時間裡把愛說得更準確。我記得我們也有過一些很戲劇性的橋段，在你的宿舍，你很生氣說你要走的時候，我把你抱得很緊很緊，像是鬆手就會失去整個世界；我們甚至還簽過一份小小的「合約」，認真到好像在跟宇宙打賭，賭我們會越來越好。可我更記得的，是那些甜得很具體的片段：五月的沖繩是海風和笑聲；八月的雅加達、科莫多島像陽光把我們曬得發亮；十二月的紐約像電影，伊薩卡卻更真實、更安靜，安靜到我才知道自己原來能這麼想你；多倫多的街景像我們並肩走路的步速；一月的拉斯維加斯、Joshua Tree、大峽谷、羚羊谷、洛杉磯、加州迪士尼，像一整串被你點亮的星星。我們一起過了聖誕節、跨年，也隔著距離一起數著 300 天、400 天，還有我的生日、情人節，那些日子不是被時間標記，而是被你標記。</p>
+            <p>有一個畫面我一直放在心底最柔軟的地方。那次我去美國找你，最後一天要離開回台灣，你捨不得，我也差點撐不住，那種心酸不是因為難過，而是因為太確定自己多愛你。最近我在畫要做成你生日蛋糕壓克力板的那張圖時，我盯著我們的照片盯了很久，手在畫、心卻一直往你那邊跑，越畫越想你，想得有點難過又有點甜，像村上春樹寫的那種安靜想念，明明沒有聲音，卻能把整個人填滿。我的小寶，如果你問我遠距離最折磨的是什麼，我想就是這種時刻，明明很想抱你，卻只能把你放進畫裡、放進文字裡。</p>
+            <p>謝謝你出現在我的人生裡，並且用你的方式改變我。你讓我變得更善良、更有耐心，讓我學會處理情緒，尤其是「他人的情緒」，學會在溝通裡先看見感受，而不是只想解決問題。你教會我怎麼表達愛，不是靠大道理，而是靠心，靠日復一日的在乎與回應。也謝謝你一直包容我那些笨拙，謝謝你在我惹你生氣的時候，沒有真的放開我，反而帶著我一起長大。你買驚喜蛋糕給我、唱歌給我聽、煮飯給我吃、陪我在美國到處玩、耍寶逗我笑、給我滿滿的愛與支持，這些我都記得，而且我很珍惜。你讓我重新相信，原來真的會有一個人這麼愛我，愛到願意陪我修正、陪我成為更好的人。</p>
+            <p>我也想偷偷把我們的未來說得更清楚一點。短期我真的好期待那個每週能夠「幾天一起住」的日常；長期我想要一個家，一個我們可以慢慢把生活養出味道、也養出專屬熱度的小窩。平日裡，準時下班我就牽你去約會，抱抱你、看電影，回家我幫你按摩、幫你洗澡吹頭髮，把你當成我的公主好好寵著——我的手指會從肩膀一路往下遊走，把你每一寸都寵到發軟；如果加班也沒關係，我們就一起吃個宵夜，互相說聲辛苦了，然後在同一個屋簷下，我要把你緊緊抱進被窩，用最熱情的方式把白天的想念全部釋放，讓你在我的體溫裡又甜又熱地融化。而週末，想出去玩的時候，我就帶你去海邊看日落、金山吃玉米、夜市大吃、開車上山看星星，把你拍得美美的當我的專屬公主；玩得再開心，晚上回到家我也會瞬間壞掉，把你壓在門後深深地吻，把一整天壓抑的渴望通通釋放——在浴室、在床上，從頭到腳好好地把你吃得又軟又熱，叫我的名字叫到聲音都啞掉。想宅在家裡的時候，我們就徹底當兩隻超黏的小懶蟲，睡到自然醒、窩在沙發上看電影、打 PS5。你坐在我腿上輸一局，我就親你十下；輸多了我就直接把你抱起來特別處罰，把你摸到全身發軟，再慢慢把你壓在沙發上、抱進被窩，讓你整個週末都軟軟的、滿滿都是我的味道，哪裡都離不開我。</p>
+            <p>最重要的是，我不想讓「想你」一直只能停在手機裡，我想把你整個人抱進每天的生活裡，每天都要說我愛你，每天都要抱抱你、深深地吻你、好好地把你吃掉，讓你知道我有多餓你（嘻嘻）。生日快樂，我的小臭寶。今天你只要開心、只要被愛、只要被偏心就好。你是我最想守護的人，也是我最想共築未來的人。願你在新的一歲裡，被世界溫柔對待，也被我更溫柔地愛著。臭寶，生日快樂，我真的真的很愛你。</p>
+            <p class="signature">With love,<br>Aston 呂新晨</p>
+          </div>
+
+          <button class="close-btn" id="closeBtn">Close</button>
+        </div>
+      </div>
+
+      <!-- 信封前口袋 -->
+      <div class="env-front-left"></div>
+      <div class="env-front-right"></div>
+      <div class="env-front-bottom"></div>
+
+      <!-- 帶有封蠟的上蓋 -->
+      <div class="envelope-flap">
+        <div class="flap-bg"></div>
+        
+        <!-- 信封表面的質感文字 (移至上蓋，愛心封蠟上方) -->
+        <div class="envelope-text">
+          <span class="env-name">Amy 歐書綾</span>
+          <span class="env-bday">24 歲生日快樂</span>
+        </div>
+
+        <div class="wax-seal">
+          <!-- 簡約愛心/星星複合圖形 (呼應可愛溫暖) -->
+          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const envelopeWrapper = document.getElementById('envelopeWrapper');
+      const closeBtn = document.getElementById('closeBtn');
+      let isAnimating = false; // 防連點機制
+
+      // 點擊信封：執行打開系列動畫
+      envelopeWrapper.addEventListener('click', function() {
+        if (isAnimating || this.classList.contains('flap-open')) return;
+        
+        isAnimating = true;
+        this.classList.add('is-interacting'); // 停止待機浮動動畫
+        
+        // 1. 打開上蓋
+        this.classList.add('flap-open');
+        
+        // 2. 上蓋打開後，抽出信紙
+        setTimeout(() => {
+          this.classList.add('letter-pull');
+          
+          // 3. 信紙抽出後，擴展為全螢幕閱讀模式
+          setTimeout(() => {
+            this.classList.add('letter-read');
+            isAnimating = false;
+          }, 600); // 等待抽出動畫完成
+
+        }, 500); // 等待上蓋打開
+      });
+
+      // 點擊關閉：執行反向收回動畫
+      closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // 阻止事件冒泡觸發信封點擊
+        if (isAnimating) return;
+        
+        isAnimating = true;
+
+        // 1. 縮小並向上推回抽出狀態
+        envelopeWrapper.classList.remove('letter-read');
+        
+        // 2. 縮小完成後，滑回信封內
+        setTimeout(() => {
+          envelopeWrapper.classList.remove('letter-pull');
+          
+          // 3. 完全進入信封後，蓋上上蓋
+          setTimeout(() => {
+            envelopeWrapper.classList.remove('flap-open');
+            envelopeWrapper.classList.remove('is-interacting'); // 恢復待機浮動
+            isAnimating = false;
+          }, 600);
+          
+        }, 600); // 與 CSS transition 的 0.6s 對齊
+      });
+    });
+  </script>
+</body>
+</html>
